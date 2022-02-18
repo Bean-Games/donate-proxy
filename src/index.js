@@ -18,6 +18,8 @@ const { json } = pkg
 const parser = json()
 
 /* Methods */
+app.all('/', (req, res) => res.send("Thanks!"))
+
 app.get('/inventory/:id', parser,
     async (req, res) => {
         res.append('Content-Type', 'application/json')
