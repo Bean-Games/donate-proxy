@@ -7,7 +7,6 @@ import pkg from 'body-parser'
 const app = express()
 const PORT = 4000
 
-const urlToFetch = "https://inventory.roblox.com/v2/users/{0}/inventory/2"
 const fetchOptions = {
     method: "GET",
     headers: {
@@ -18,25 +17,19 @@ const fetchOptions = {
 const { json } = pkg
 const parser = json()
 
-/* Formatter function */
-String.prototype.format = function () {
-    let args = arguments;
-
-    return this.replace(/{([0-9]+)}/g, function (match, index) {
-        return typeof args[index] == 'undefined' ? match : args[index];
-    })
-}
-
 /* Methods */
-app.get('/inventory', parser,
+app.post('/inventory', parser,
     async (req, res) => {
         res.append('Content-Type', 'application/json')
 
         try {
             let id = req.body.playerid
-
-            fetch(urlToFetch.format(toString(id)), fetchOptions).then((data) => {
-                res.send(data.json())
+            const urlToFetch = `https://www.roblox.com/users/inventory/list-json?assetTypeId=2&cursor=&itemsPerPage=100&pageNumber=1&sortOrder=Desc&userId=${id}`
+          
+            fetch(urlToFetch, fetchOptions).then((data) => {
+                data.json().then(d => {
+                  res.send(d)
+                })
             }).catch(err => console.log(err))
         } catch (error) {
             res.send({
