@@ -20,12 +20,12 @@ const parser = json()
 /* Methods */
 app.all('/', (req, res) => res.send("Thanks!"))
 
-app.get('/inventory/:id', parser,
+app.get('/inventory', parser,
     async (req, res) => {
         res.append('Content-Type', 'application/json')
 
         try {
-            let id = req.params.id
+            let id = req.query.playerid
             const urlToFetch = `https://www.roblox.com/users/inventory/list-json?assetTypeId=2&cursor=&itemsPerPage=100&pageNumber=1&sortOrder=Desc&userId=${id}`
           
             fetch(urlToFetch, fetchOptions).then((data) => {
